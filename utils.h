@@ -1,5 +1,3 @@
-//
-//
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -14,14 +12,14 @@
 #include <arpa/inet.h>
 #include <time.h>
 
-
 #ifndef C_UTILS_UTILS_H
 #define C_UTILS_UTILS_H
-
 #endif
 
 #define CONNECTED 1
 #define DISCONNECTED 0
+#define OK 1
+#define NO -1
 
 int get_mac_by_name(char *mac);
 

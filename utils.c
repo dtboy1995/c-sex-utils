@@ -1,5 +1,3 @@
-//
-//
 #include "utils.h"
 
 int get_connection_state(char *domain_name) {
@@ -7,11 +5,11 @@ int get_connection_state(char *domain_name) {
     while (i < 1000) {
         pid_t pid;
         if ((pid = vfork()) < 0) {
-            perror("create socket fail\n");
+            perror("vfork error\n");
             return DISCONNECTED;
         } else if (pid == 0) {
             if (execlp("ping", "ping", "-c", "1", domain_name, (char *) 0) < 0) {
-                //
+                perror("execlp error\n");
                 return DISCONNECTED;
             }
         }
@@ -33,13 +31,13 @@ int get_mac(char *mac) {
     sock_mac = socket(AF_INET, SOCK_STREAM, 0);
     if (sock_mac == -1) {
         perror("create socket fail\n");
-        return -1;
+        return NO;
     }
     memset(&tmp, 0, sizeof(tmp));
     strncpy(tmp.ifr_name, IF_INTERFACE_NAME, sizeof(tmp.ifr_name) - 1);
     if ((ioctl(sock_mac, SIOCGIFHWADDR, &tmp)) < 0) {
         perror("mac ioctl error\n");
-        return -1;
+        return NO;
     }
     sprintf(mac_addr, "%02x%02x%02x%02x%02x%02x",
             (unsigned char) tmp.ifr_hwaddr.sa_data[0],
@@ -51,7 +49,7 @@ int get_mac(char *mac) {
     );
     close(sock_mac);
     memcpy(mac, mac_addr, strlen(mac_addr));
-    return 1;
+    return OK;
 }
 
 int main() {
