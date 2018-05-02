@@ -24,7 +24,7 @@ int get_connection_state(char *domain_name) {
     return DISCONNECTED;
 }
 
-int get_mac(char *mac) {
+int get_mac(char *mac, char* if_name) {
     struct ifreq tmp;
     int sock_mac;
     char mac_addr[30];
@@ -34,7 +34,7 @@ int get_mac(char *mac) {
         return NO;
     }
     memset(&tmp, 0, sizeof(tmp));
-    strncpy(tmp.ifr_name, IF_INTERFACE_NAME, sizeof(tmp.ifr_name) - 1);
+    strncpy(tmp.ifr_name, if_name, sizeof(tmp.ifr_name) - 1);
     if ((ioctl(sock_mac, SIOCGIFHWADDR, &tmp)) < 0) {
         perror("mac ioctl error\n");
         return NO;

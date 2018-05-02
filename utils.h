@@ -21,6 +21,6 @@
 #define OK 1
 #define NO -1
 
-int get_mac_by_name(char *mac);
+int get_mac_by_name(char *mac, char* if_name);
 
 int get_connection_state(char *domain_name);

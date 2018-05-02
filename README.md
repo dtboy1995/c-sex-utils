@@ -6,29 +6,30 @@ some small C language tool functions
 
 > MACROS
 
-|  name   |   value    |
-|----------|:---------:|
-| CONNECTED |  1 |
-| DISCONNECTED | 0 |
-| OK | 1 |
-| NO | -1 |
+|  name   |   value    | belongs to function |
+|----------|:---------:|-------------|
+| CONNECTED |  1 | `get_connection_state` |
+| DISCONNECTED | 0 | `get_connection_state` |
+| OK | 1 | `get_mac_by_name` |
+| NO | -1 | `get_mac_by_name` |
 
 
 > FUNCTIONS
 
 - get_mac_by_name
   - defination
-    - `int get_mac_by_name(char *mac)`
+    - `int get_mac_by_name(char *mac, char* if_name)`
   - params
     - mac **used to receive MAC addresses.**
+    - if_name **the network card name**
   - return
     - OK
     - NO
   - example
 
 ```c
-char mac_addr[16];
-int is_success = get_mac_by_name("eth0");
+char mac_addr[12];
+int is_success = get_mac_by_name(mac_addr, "eth0");
 ```
 
 - get_connection_state
