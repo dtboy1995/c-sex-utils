@@ -1,5 +1,58 @@
 #include "utils.h"
 
+int http_get(char *domain, char *url, int port, char *res, int res_len) {
+
+    char text[4096];
+    char request_line[128];
+    char header_host[256];
+
+    sprintf(request_line, "GET http://%s:%d%s HTTP/1.1\r\n", domain, port, url);
+    sprintf(header_host, "Host: %s:%d\r\n", domain, port);
+    strcat(text, request_line);
+    strcat(text, "Accept: */*\r\n");
+    strcat(text, header_host);
+    strcat(text, "Connection: Close\r\n");
+    strcat(text, "\r\n");
+
+    printf("%s\n", text);
+
+    int sock_fd;
+
+    struct sockaddr_in addr_serv;
+    // getnameinfo
+    struct hostent *host_info = gethostbyname(domain);
+
+    bzero(&addr_serv, sizeof(addr_serv));
+    addr_serv.sin_family = AF_INET;
+    addr_serv.sin_port = htons(port);
+    memcpy(&addr_serv.sin_addr, &(*host_info->h_addr_list[0]), host_info->h_length);
+
+    sock_fd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sock_fd < 0) {
+        perror("sock error\n");
+    } else {
+        printf("socket created\n");
+    }
+
+    if (connect(sock_fd, (struct sockaddr *) (&addr_serv), sizeof(addr_serv)) < 0) {
+        perror("connect error\n");
+    } else {
+        printf("connecting\n");
+    }
+
+    if (send(sock_fd, text, strlen(text), 0) < 0) {
+        perror("send error\n");
+    } else {
+        if (recv(sock_fd, res, res_len, 0) < 0) {
+            perror("receive error\n");
+        } else {
+            return SUCCESS;
+        }
+    }
+    close(sock_fd);
+    return FAILED;
+}
+
 int get_connection_state(char *domain_name) {
     int i = 0;
     while (i < 1000) {
@@ -24,7 +77,7 @@ int get_connection_state(char *domain_name) {
     return DISCONNECTED;
 }
 
-int get_mac(char *mac, char* if_name) {
+int get_mac(char *mac, char *if_name) {
     struct ifreq tmp;
     int sock_mac;
     char mac_addr[30];

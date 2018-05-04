@@ -20,7 +20,11 @@
 #define DISCONNECTED 0
 #define OK 1
 #define NO -1
+#define SUCCESS 1
+#define FAILED 0
 
 int get_mac_by_name(char *mac, char* if_name);
 
 int get_connection_state(char *domain_name);
+
+int http_get(char *domain, char * url, int port, char * res, int res_len);
