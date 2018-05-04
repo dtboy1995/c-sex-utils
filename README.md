@@ -48,7 +48,7 @@ int is_success = get_mac_by_name(mac_addr, "eth0");
 int state = get_connection_state("www.baidu.com");
 ```
 
-- int http_get
+- http_get
   - defination
     - `int http_get(char *domain, char * url, int port, char * res, int res_len);`
     - params
