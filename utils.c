@@ -1,5 +1,85 @@
 #include "utils.h"
 
+int https_get(char *domain, char *url, int port, char *res, int res_len) {
+
+    char text[4096];
+    SSL *ssl;
+    SSL_CTX *ssl_ctx;
+
+    int sock_fd;
+
+    struct sockaddr_in addr_serv;
+    // getnameinfo
+    struct hostent *host_info = gethostbyname(domain);
+
+    bzero(&addr_serv, sizeof(addr_serv));
+    addr_serv.sin_family = AF_INET;
+    addr_serv.sin_port = htons(port);
+    memcpy(&addr_serv.sin_addr, &(*host_info->h_addr_list[0]), host_info->h_length);
+    sock_fd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sock_fd < 0) {
+        perror("sock error\n");
+    } else {
+        printf("socket created\n");
+    }
+
+    if (connect(sock_fd, (struct sockaddr *) (&addr_serv), sizeof(addr_serv)) < 0) {
+        perror("connect error\n");
+    } else {
+        printf("connecting\n");
+    }
+
+    SSL_library_init();
+    SSL_load_error_strings();
+    ssl_ctx = SSL_CTX_new(SSLv23_client_method());
+    if (ssl_ctx == NULL) {
+        close(sock_fd);
+        return FAILED;
+    }
+    ssl = SSL_new(ssl_ctx);
+    if (ssl == NULL) {
+        close(sock_fd);
+        return FAILED;
+    }
+
+    int relation = SSL_set_fd(ssl, sock_fd);
+    if (relation == 0) {
+        close(sock_fd);
+        return FAILED;
+    }
+
+    int ssl_con = SSL_connect(ssl);
+    if (ssl_con != 1) {
+        close(sock_fd);
+        return FAILED;
+    }
+
+    sprintf(text, "GET https://%s:%d%s HTTP/1.1\r\nAccept: */*\r\n\
+User-Agent: Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)\r\n\
+Host: %s:%d\r\nConnection: Close\r\n\r\n", domain, port, url, domain, port);
+
+    int ssl_w = SSL_write(ssl, text, strlen(text));
+
+    if (ssl_w == -1) {
+        close(sock_fd);
+        return FAILED;
+    }
+
+    int ssl_r = SSL_read(ssl, res, res_len);
+    if (ssl_r < 0) {
+        close(sock_fd);
+        return FAILED;
+    }
+
+    SSL_shutdown(ssl);
+    close(sock_fd);
+    SSL_free(ssl);
+    SSL_CTX_free(ssl_ctx);
+    ERR_free_strings();
+
+    return SUCCESS;
+}
+
 int http_get(char *domain, char *url, int port, char *res, int res_len) {
 
     char text[4096];
@@ -105,6 +185,15 @@ int get_mac(char *mac, char *if_name) {
     return OK;
 }
 
+char* get_res_body(char* res){
+    char *s = strstr(res, HTTP_BR);
+    return s + strlen(HTTP_BR);
+}
+
 int main() {
+    char res[4096];
+    int ret = https_get("api.wenanle.com", "/", 443, res, 4096);
+    char * body = get_res_body(res);
+    printf("%s", body);
     return 0;
 }
