@@ -191,9 +191,5 @@ char* get_res_body(char* res){
 }
 
 int main() {
-    char res[4096];
-    int ret = https_get("api.wenanle.com", "/", 443, res, 4096);
-    char * body = get_res_body(res);
-    printf("%s", body);
     return 0;
 }

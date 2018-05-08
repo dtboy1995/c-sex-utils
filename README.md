@@ -12,8 +12,8 @@ some small C language tool functions
 | DISCONNECTED | 0 | `get_connection_state` |
 | OK | 1 | `get_mac_by_name` |
 | NO | -1 | `get_mac_by_name` |
-| SUCCESS | 1 | `http_get` |
-| FAILED | 0 | `http_get` |
+| SUCCESS | 1 | `http_get` `https_get` |
+| FAILED | 0 | `http_get` `https_get` |
 
 
 > FUNCTIONS
@@ -50,7 +50,7 @@ int state = get_connection_state("www.baidu.com");
 
 - http_get
   - defination
-    - `int http_get(char *domain, char * url, int port, char * res, int res_len);`
+    - `int http_get(char *domain, char * url, int port, char * res, int res_len)`
   - params
     - domain **the domain name for request.**
     - url **the url for request.**
@@ -66,4 +66,37 @@ int state = get_connection_state("www.baidu.com");
 int len = 4096;
 char res[len];
 int is_success = http_get("apistage.wenanle.com", "/", 80, res, len);
+```
+
+- https_get
+  - defination
+    - `int https_get(char *domain, char * url, int port, char * res, int res_len)`
+  - params
+    - domain **the domain name for request.**
+    - url **the url for request.**
+    - port **the port for request.**
+    - res **the char[] for receiver response.**
+    - res_len **the length of response.**
+  - return
+    - SUCCESS
+    - FAILED
+  - example
+
+```c
+int len = 4096;
+char res[len];
+int is_success = http_gets("api.wenanle.com", "/", 443, res, len);
+```
+
+- get_res_body
+  - defination
+    - `char* get_res_body(char* res)`
+  - params
+    - res **http or https response.**
+  - return
+    - **response body**
+  - example
+
+```c
+char * body = get_res_body(res);
 ```
