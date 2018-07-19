@@ -190,6 +190,19 @@ char* get_res_body(char* res){
     return s + strlen(HTTP_BR);
 }
 
+void bubble_sort(int *arr, int len, int inverse) {
+    for (int i = 0; i < len - 1; ++i) {
+        for (int j = 0; j < len - i - 1; ++j) {
+            int compare = inverse == 0? arr[j] > arr[j + 1] : arr[j] < arr[j + 1];
+            if (compare) {
+                int tmp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = tmp;
+            }
+        }
+    }
+}
+
 int main() {
     return 0;
 }

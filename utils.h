@@ -33,3 +33,5 @@ int http_get(char *domain, char * url, int port, char * res, int res_len);
 int https_get(char *domain, char * url, int port, char * res, int res_len);
 
 char* get_res_body(char* res);
+
+void bubble_sort(int* arr, int len, int inverse);
