@@ -1,3 +1,6 @@
+#ifndef _UTILS_
+#define _UTILS_
+
 #include "utils.h"
 
 int https_get(char *domain, char *url, int port, char *res, int res_len) {
@@ -206,3 +209,5 @@ void bubble_sort(int *arr, int len, int inverse) {
 int main() {
     return 0;
 }
+
+#endif

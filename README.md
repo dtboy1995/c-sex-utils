@@ -100,3 +100,19 @@ int is_success = http_gets("api.wenanle.com", "/", 443, res, len);
 ```c
 char * body = get_res_body(res);
 ```
+
+- bubble_sort
+  - defination
+    - `void bubble_sort(int* arr, int len, int inverse);`
+  - params
+    - arr **int arr**
+    - len **arr length**
+    - inverse **inverse or not**
+  - example
+
+```c
+int arr[] = {1, 3, 5, 2, 8, 6, 3};
+bubble_sort(arr, 7, 1);
+// or
+bubble_sort(arr, 7, 0);
+```

@@ -1,3 +1,6 @@
+#ifndef _UTILS_
+#define _UTILS_
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -35,3 +38,5 @@ int https_get(char *domain, char * url, int port, char * res, int res_len);
 char* get_res_body(char* res);
 
 void bubble_sort(int* arr, int len, int inverse);
+
+#endif
