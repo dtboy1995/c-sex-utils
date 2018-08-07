@@ -1,4 +1,4 @@
-﻿![c-sex-utils](static/logo.gif)
+﻿![c-sex-utils](static/logo.png)
 
 # c-sex-utils
 
